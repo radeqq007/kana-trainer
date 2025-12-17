@@ -10,5 +10,5 @@
     "@renderer": "src/renderer/src"
   },
   "typescript": true,
-  "registry": "https://shadcn-svelte.com/registry"
+  "registry": "https://ui.shadcn.com/r/{name}.json"
 }
