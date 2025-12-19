@@ -7,12 +7,12 @@ const Home = (): React.JSX.Element => {
       <h1 className="text-9xl font-bold">あ</h1>
       <h2 className="text-7xl font-medium">Kana Trainer</h2>
       <span className="flex gap-2 mt-10">
-        <Button variant="secondary">
-          <Link to="/characters">Change Characters</Link>
-        </Button>
-        <Button variant="default">
-          <Link to="/play">Start</Link>
-        </Button>
+        <Link to="/characters">
+          <Button variant="secondary">Change Characters</Button>
+        </Link>
+        <Link to="/play">
+          <Button variant="default">Start</Button>
+        </Link>
       </span>
     </div>
   );
