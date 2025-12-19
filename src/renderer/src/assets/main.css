@@ -32,3 +32,13 @@ body {
   user-select: none;
   -webkit-user-select: none;
 }
+
+::-webkit-scrollbar {
+  background-color: var(--color-background);
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent);
+  border-radius: var(--radius-md);
+}
