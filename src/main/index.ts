@@ -5,7 +5,6 @@ import { join } from "path";
 import icon from "../../resources/icon.png?asset";
 
 function createWindow(): void {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
