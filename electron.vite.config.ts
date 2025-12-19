@@ -10,6 +10,10 @@ export default defineConfig({
     resolve: {
       alias: {
         "@renderer": resolve("src/renderer/src"),
+        "@shared": resolve("src/shared"),
+        "@main": resolve("src/main"),
+        "@components": resolve("src/renderer/src/components"),
+        "@": resolve("src"),
       },
     },
     plugins: [react(), tailwindcss()],
