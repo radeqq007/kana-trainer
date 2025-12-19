@@ -1,6 +1,7 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron";
+import { electronApp, is, optimizer } from "@electron-toolkit/utils";
+import { app, BrowserWindow, ipcMain, shell } from "electron";
+import Store from "electron-store";
 import { join } from "path";
-import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 
 function createWindow(): void {
@@ -14,6 +15,7 @@ function createWindow(): void {
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
+      contextIsolation: true,
     },
   });
 
@@ -72,3 +74,17 @@ app.on("window-all-closed", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+const store = new Store();
+
+ipcMain.handle("store:get", (_event, key) => {
+  return store.get(key);
+});
+
+ipcMain.handle("store:set", (_event, key, value) => {
+  store.set(key, value);
+});
+
+ipcMain.handle("store:delete", (_event, key) => {
+  store.delete(key);
+});

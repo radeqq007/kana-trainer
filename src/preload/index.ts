@@ -1,5 +1,5 @@
-import { contextBridge } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
+import { contextBridge, ipcRenderer } from "electron";
 
 // Custom APIs for renderer
 const api = {};
@@ -20,3 +20,9 @@ if (process.contextIsolated) {
   // @ts-ignore (define in dts)
   window.api = api;
 }
+
+contextBridge.exposeInMainWorld("store", {
+  get: (key: string) => ipcRenderer.invoke("store:get", key),
+  set: (key: string, value: any) => ipcRenderer.invoke("store:set", key, value),
+  delete: (key: string) => ipcRenderer.invoke("store:delete", key),
+});
