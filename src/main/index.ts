@@ -3,6 +3,7 @@ import { app, BrowserWindow, ipcMain, shell } from "electron";
 import Store from "electron-store";
 import { join } from "path";
 import icon from "../../resources/icon.png?asset";
+import chars from "../renderer/src/data/characters.json";
 
 function createWindow(): void {
   // Create the browser window.
@@ -75,7 +76,12 @@ app.on("window-all-closed", () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-const store = new Store();
+const store = new Store({
+  defaults: {
+    hiragana: Object.keys(chars.hiragana),
+    katakana: Object.keys(chars.katakana),
+  },
+});
 
 ipcMain.handle("store:get", (_event, key) => {
   return store.get(key);
