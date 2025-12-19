@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: theme("colors.zinc.900");
+  --color-foreground: theme("colors.zinc.50");
+}

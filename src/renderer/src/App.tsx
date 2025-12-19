@@ -1,4 +1,3 @@
-import "@renderer/assets/main.css";
 import Home from "@renderer/pages/Home";
 import { Route, Routes } from "react-router-dom";
 
