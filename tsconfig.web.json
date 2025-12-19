@@ -13,6 +13,18 @@
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"
+      ],
+      "@shared/*": [
+        "src/shared/*"
+      ],
+      "@main/*": [
+        "src/main/*"
+      ],
+      "@components/*": [
+        "src/renderer/src/components/*"
+      ],
+      "@/*": [
+        "src/*"
       ]
     }
   }
