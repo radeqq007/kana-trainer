@@ -3,26 +3,26 @@
 @theme {
   --color-background: theme("colors.zinc.900");
   --color-foreground: theme("colors.zinc.50");
-  
+
   --color-primary: theme("colors.zinc.50");
   --color-primary-foreground: theme("colors.zinc.900");
-  
+
   --color-secondary: theme("colors.zinc.800");
   --color-secondary-foreground: theme("colors.zinc.50");
-  
+
   --color-muted: theme("colors.zinc.800");
   --color-muted-foreground: theme("colors.zinc.400");
-  
+
   --color-accent: theme("colors.zinc.800");
   --color-accent-foreground: theme("colors.zinc.50");
-  
+
   --color-destructive: theme("colors.red.900");
   --color-destructive-foreground: theme("colors.zinc.50");
 
   --color-border: theme("colors.zinc.800");
   --color-input: theme("colors.zinc.800");
   --color-ring: theme("colors.zinc.300");
-  
+
   --radius-lg: 0.5rem;
   --radius-md: calc(0.5rem - 2px);
   --radius-sm: calc(0.5rem - 4px);
