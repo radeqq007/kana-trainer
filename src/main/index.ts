@@ -3,7 +3,6 @@ import { app, BrowserWindow, ipcMain, shell } from "electron";
 import Store from "electron-store";
 import { join } from "path";
 import icon from "../../resources/icon.png?asset";
-import chars from "../renderer/src/data/characters.json";
 
 function createWindow(): void {
   // Create the browser window.
@@ -63,25 +62,45 @@ function registerIpcHandlers(): void {
   });
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   electronApp.setAppUserModelId("com.electron");
 
   app.on("browser-window-created", (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  initStore();
+  await initStore();
 
   registerIpcHandlers();
 
   // default values
   try {
-    if (!store.has("hiragana") && chars?.hiragana) {
-      store.set("hiragana", Object.keys(chars.hiragana));
-    }
-    if (!store.has("katakana") && chars?.katakana) {
-      store.set("katakana", Object.keys(chars.katakana));
-    }
+    store.set("hiragana",
+      [
+        "a", "i", "u", "e", "o",
+        "ka", "ki", "ku", "ke", "ko",
+        "sa", "shi", "su", "se", "so",
+        "ta", "chi", "tsu", "te", "to",
+        "na", "ni", "nu", "ne", "no",
+        "ha", "hi", "fu", "he", "ho",
+        "ma", "mi", "mu", "me", "mo",
+        "ya", "yu", "yo",
+        "ra", "ri", "ru", "re", "ro",
+        "wa", "wo", "n"
+      ]);
+    store.set("katakana",
+      [
+        "a", "i", "u", "e", "o",
+        "ka", "ki", "ku", "ke", "ko",
+        "sa", "shi", "su", "se", "so",
+        "ta", "chi", "tsu", "te", "to",
+        "na", "ni", "nu", "ne", "no",
+        "ha", "hi", "fu", "he", "ho",
+        "ma", "mi", "mu", "me", "mo",
+        "ya", "yu", "yo",
+        "ra", "ri", "ru", "re", "ro",
+        "wa", "wo", "n"
+      ]);
   } catch (err) {
     console.error("Failed to initialize store defaults:", err);
   }
