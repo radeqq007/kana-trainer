@@ -1,13 +1,14 @@
 import { Button } from "@renderer/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@renderer/components/ui/toggle-group";
 import chars from "@renderer/data/characters.json";
+import { Link } from "react-router-dom";
 
 const Characters = (): React.JSX.Element => {
   return (
     <div className="flex flex-col p-4 gap-10">
       <span className="flex items-center gap-6">
         <Button variant="outline" size="sm">
-          &lt;
+          <Link to="/">&lt;</Link>
         </Button>
         <h1 className="text-4xl font-bold">Characters</h1>
       </span>
@@ -17,7 +18,7 @@ const Characters = (): React.JSX.Element => {
         <ToggleGroup type="multiple" variant="default" size="lg" className="flex flex-wrap">
           {Object.entries(chars.hiragana).map(([key, value]) => (
             <ToggleGroupItem key={key} value={key} className="grow">
-              <span className="font-medium">{value}</span>
+              <span className="font-medium">{value}</span>({key})
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
@@ -28,7 +29,7 @@ const Characters = (): React.JSX.Element => {
         <ToggleGroup type="multiple" variant="default" size="lg" className="flex flex-wrap">
           {Object.entries(chars.katakana).map(([key, value]) => (
             <ToggleGroupItem key={key} value={key} className="grow">
-              <span className="font-medium">{value}</span>
+              <span className="font-medium">{value}</span>({key})
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
