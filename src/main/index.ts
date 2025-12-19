@@ -42,8 +42,8 @@ app.on("window-all-closed", () => {
 });
 
 // I know this sucks but otherwise it doesn't work
-let store: any;
-async function initStore(): Promise<any> {
+let store: Store;
+async function initStore(): Promise<void> {
   const { default: Store } = await import("electron-store");
   store = new Store();
 }
