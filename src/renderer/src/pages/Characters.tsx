@@ -63,7 +63,14 @@ const Characters = (): React.JSX.Element => {
 
       <span className="flex flex-col gap-3 justify-center items-center w-2/3 m-auto">
         <h2 className="text-2xl font-medium w-full">Katakana:</h2>
-        <ToggleGroup type="multiple" variant="default" size="lg" className="flex flex-wrap" value={katakana} onValueChange={handleKatakanaChange}>
+        <ToggleGroup
+          type="multiple"
+          variant="default"
+          size="lg"
+          className="flex flex-wrap"
+          value={katakana}
+          onValueChange={handleKatakanaChange}
+        >
           {Object.entries(chars.katakana).map(([key, value]) => (
             <ToggleGroupItem
               key={key}
