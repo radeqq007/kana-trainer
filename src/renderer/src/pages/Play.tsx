@@ -5,6 +5,17 @@ import Characters from "@renderer/data/characters.json";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+interface Question {
+  q: string;
+  a: string;
+}
+
+interface Score {
+  correct: number;
+  incorrect: number;
+  // streak: number;
+}
+
 const Play = (): React.JSX.Element => {
   const location = useLocation();
   const charCount: number = location.state?.charCount;
@@ -27,28 +38,27 @@ const Play = (): React.JSX.Element => {
 
   const nextQuestion = (): void => {
     const { q, a } = generateQuestion(charCount);
-    setQuestion(q);
-    setAnswer(a);
+    setQuestion({ q, a });
     setUserAnswer("");
   };
 
   const checkAnswer = (): void => {
-    if (userAnswer == answer) {
-      setCorrect(correct + 1);
+    if (userAnswer == question.a) {
+      setScore((prev) => ({ ...prev, correct: prev.correct + 1 }));
     } else {
-      setIncorrect(incorrect + 1);
+      setScore((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
     }
     nextQuestion();
   };
 
   const [initialGameData] = useState(() => generateQuestion(charCount));
 
-  const [question, setQuestion] = useState<string>(initialGameData.q);
-  const [answer, setAnswer] = useState<string>(initialGameData.a);
+  const [question, setQuestion] = useState<Question>({
+    q: initialGameData.q,
+    a: initialGameData.a,
+  });
   const [userAnswer, setUserAnswer] = useState<string>("");
-  const [correct, setCorrect] = useState<number>(0);
-  const [incorrect, setIncorrect] = useState<number>(0);
-  // const [streak, setStreak] = useState(0);
+  const [score, setScore] = useState<Score>({ correct: 0, incorrect: 0 });
 
   return (
     <div>
@@ -63,7 +73,7 @@ const Play = (): React.JSX.Element => {
         </span>
 
         <div className="flex flex-col items-center gap-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <h1 className="text-6xl">{question}</h1>
+          <h1 className="text-6xl">{question.q}</h1>
           <span className="flex align-center items-end gap-2">
             <Field>
               <FieldContent>
@@ -81,7 +91,7 @@ const Play = (): React.JSX.Element => {
             </Button>
           </span>
           <div className="mt-4 text-lg">
-            ✅ Correct: {correct} | ❌ Incorrect: {incorrect}
+            ✅ Correct: {score.correct} | ❌ Incorrect: {score.incorrect}
           </div>
         </div>
       </div>
