@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Play = (): React.JSX.Element => {
-  const [numberOfChars, setNumberOfChars] = useState(1)
+  const [numberOfChars, setNumberOfChars] = useState(1);
 
   return (
     <div>
