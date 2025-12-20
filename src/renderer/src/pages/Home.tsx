@@ -10,7 +10,7 @@ const Home = (): React.JSX.Element => {
         <Link to="/characters">
           <Button variant="secondary">Change Characters</Button>
         </Link>
-        <Link to="/play">
+        <Link to="/setup">
           <Button variant="default">Start</Button>
         </Link>
       </span>
