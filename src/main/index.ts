@@ -74,7 +74,23 @@ app.whenReady().then(async () => {
 
   // default values
   try {
-    store.set("hiragana",
+    if (!store.get("hiragana")) {
+      store.set("hiragana",
+        [
+          "a", "i", "u", "e", "o",
+          "ka", "ki", "ku", "ke", "ko",
+          "sa", "shi", "su", "se", "so",
+          "ta", "chi", "tsu", "te", "to",
+          "na", "ni", "nu", "ne", "no",
+          "ha", "hi", "fu", "he", "ho",
+          "ma", "mi", "mu", "me", "mo",
+          "ya", "yu", "yo",
+          "ra", "ri", "ru", "re", "ro",
+          "wa", "wo", "n"
+        ]);
+      }
+    if (!store.get("katakana")) {
+      store.set("katakana",
       [
         "a", "i", "u", "e", "o",
         "ka", "ki", "ku", "ke", "ko",
@@ -87,19 +103,7 @@ app.whenReady().then(async () => {
         "ra", "ri", "ru", "re", "ro",
         "wa", "wo", "n"
       ]);
-    store.set("katakana",
-      [
-        "a", "i", "u", "e", "o",
-        "ka", "ki", "ku", "ke", "ko",
-        "sa", "shi", "su", "se", "so",
-        "ta", "chi", "tsu", "te", "to",
-        "na", "ni", "nu", "ne", "no",
-        "ha", "hi", "fu", "he", "ho",
-        "ma", "mi", "mu", "me", "mo",
-        "ya", "yu", "yo",
-        "ra", "ri", "ru", "re", "ro",
-        "wa", "wo", "n"
-      ]);
+    }
   } catch (err) {
     console.error("Failed to initialize store defaults:", err);
   }
