@@ -4,7 +4,7 @@ import { Input } from "@components/ui/input";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Play = (): React.JSX.Element => {
+const Setup = (): React.JSX.Element => {
   const [numberOfChars, setNumberOfChars] = useState(1);
 
   return (
@@ -42,4 +42,4 @@ const Play = (): React.JSX.Element => {
   );
 };
 
-export default Play;
+export default Setup;
