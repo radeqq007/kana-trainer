@@ -72,7 +72,7 @@ const Play = (): React.JSX.Element => {
                   required
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
-                  />
+                />
               </FieldContent>
             </Field>
 
