@@ -8,7 +8,9 @@ const Characters = (): React.JSX.Element => {
     <div className="flex flex-col p-4 gap-10">
       <span className="flex items-center gap-6">
         <Link to="/">
-          <Button variant="outline" size="sm">&lt;</Button>
+          <Button variant="outline" size="sm">
+            &lt;
+          </Button>
         </Link>
         <h1 className="text-4xl font-bold">Characters</h1>
       </span>
