@@ -121,6 +121,9 @@ const Play = (): React.JSX.Element => {
                   type="text"
                   required
                   value={userAnswer}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") checkAnswer();
+                  }}
                   onChange={(e) => setUserAnswer(e.target.value)}
                 />
               </FieldContent>
