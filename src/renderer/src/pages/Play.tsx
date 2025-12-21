@@ -2,7 +2,7 @@ import { Button } from "@components/ui/button";
 import { Field, FieldContent } from "@components/ui/field";
 import { Input } from "@components/ui/input";
 import Characters from "@renderer/data/characters.json";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 interface Question {
@@ -16,31 +16,56 @@ interface Score {
   // streak: number;
 }
 
+type System = "hiragana" | "katakana";
+
 const Play = (): React.JSX.Element => {
   const location = useLocation();
   const charCount: number = location.state?.charCount;
 
-  const generateQuestion = (count: number): { q: string; a: string } => {
-    const system = ["hiragana", "katakana"][Math.floor(Math.random() * 2)];
-    const keys = Object.keys(Characters[system]);
+  const [enabled, setEnabled] = useState<Record<System, string[]>>({
+    hiragana: [],
+    katakana: [],
+  });
+  const [loading, setLoading] = useState(true);
 
-    let q = "";
-    let a = "";
+  const [question, setQuestion] = useState<Question>({
+    q: "",
+    a: "",
+  });
+  const [userAnswer, setUserAnswer] = useState<string>("");
+  const [score, setScore] = useState<Score>({ correct: 0, incorrect: 0 });
 
-    for (let i = 0; i < count; i++) {
-      const ch = keys[Math.floor(Math.random() * keys.length)];
-      q += Characters[system][ch];
-      a += ch;
-    }
+  const generateQuestion = useCallback(
+    (count: number, currentEnabled: Record<System, string[]>): { q: string; a: string } => {
+      const systems = (["hiragana", "katakana"] as System[]).filter(
+        (s) => currentEnabled[s].length > 0,
+      );
+      console.log(systems);
+      if (systems.length === 0) return { q: "None Selected", a: "" };
 
-    return { q, a };
-  };
+      const system = systems[Math.floor(Math.random() * systems.length)];
+      const keys = currentEnabled[system];
 
-  const nextQuestion = (): void => {
-    const { q, a } = generateQuestion(charCount);
+      let q = "";
+      let a = "";
+
+      for (let i = 0; i < count; i++) {
+        const romaji = keys[Math.floor(Math.random() * keys.length)];
+        const kana = (Characters as Record<System, Record<string, string>>)[system][romaji];
+        q += kana;
+        a += romaji;
+      }
+
+      return { q, a };
+    },
+    [],
+  );
+
+  const nextQuestion = useCallback((): void => {
+    const { q, a } = generateQuestion(charCount, enabled);
     setQuestion({ q, a });
     setUserAnswer("");
-  };
+  }, [charCount, enabled, generateQuestion]);
 
   const checkAnswer = (): void => {
     if (userAnswer == question.a) {
@@ -51,14 +76,29 @@ const Play = (): React.JSX.Element => {
     nextQuestion();
   };
 
-  const [initialGameData] = useState(() => generateQuestion(charCount));
+  useEffect(() => {
+    (async () => {
+      // @ts-ignore imma fix that later
+      const h = await window.store.get("hiragana");
+      // @ts-ignore imma fix that later
+      const k = await window.store.get("katakana");
 
-  const [question, setQuestion] = useState<Question>({
-    q: initialGameData.q,
-    a: initialGameData.a,
-  });
-  const [userAnswer, setUserAnswer] = useState<string>("");
-  const [score, setScore] = useState<Score>({ correct: 0, incorrect: 0 });
+      const fetchedEnabled = {
+        hiragana: h || [],
+        katakana: k || [],
+      };
+
+      setEnabled(fetchedEnabled);
+
+      // Immediately generate the first question using the fetched data
+      const q = generateQuestion(charCount, fetchedEnabled);
+      setQuestion(q);
+
+      setLoading(false);
+    })();
+  }, [charCount, generateQuestion]);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div>
