@@ -25,7 +25,6 @@ const Setup = (): React.JSX.Element => {
             <FieldContent>
               <Input
                 type="number"
-                defaultValue={1}
                 required
                 value={numberOfChars}
                 onChange={(e) => setNumberOfChars(Number(e.target.value))}
