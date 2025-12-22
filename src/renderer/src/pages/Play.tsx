@@ -75,11 +75,11 @@ const Play = (): React.JSX.Element => {
   const checkAnswer = (): void => {
     if (userAnswer == question.a) {
       setScore((prev) => ({ ...prev, correct: prev.correct + 1 }));
-      setMsg(`✅ ${userAnswer} is correct!`);
+      setMsg(`${userAnswer} is correct!`);
       setCorrect(true);
     } else {
       setScore((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
-      setMsg(`❌ Correct answer: ${question.a}`);
+      setMsg(`Wrong! Correct answer: ${question.a}`);
       setCorrect(false);
     }
     nextQuestion();
