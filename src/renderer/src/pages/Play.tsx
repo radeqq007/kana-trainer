@@ -39,6 +39,7 @@ const Play = (): React.JSX.Element => {
 
   const [msg, setMsg] = useState<string>("");
   const [correct, setCorrect] = useState<boolean>(false);
+  const [inputLocked, setInputLocked] = useState(false);
 
   const generateQuestion = useCallback(
     (count: number, currentEnabled: Record<System, string[]>): { q: string; a: string } => {
@@ -82,7 +83,11 @@ const Play = (): React.JSX.Element => {
       setMsg(`Wrong! Correct answer: ${question.a}`);
       setCorrect(false);
     }
-    nextQuestion();
+    setInputLocked(true)
+    setTimeout(() => {
+      nextQuestion()
+      setInputLocked(false)
+    }, 800);
   };
 
   const total = score.correct + score.incorrect;
@@ -130,11 +135,12 @@ const Play = (): React.JSX.Element => {
             <Field>
               <FieldContent>
                 <Input
+                  readOnly={inputLocked}
                   type="text"
                   required
                   value={userAnswer}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") checkAnswer();
+                    if (e.key === "Enter" && !inputLocked) checkAnswer();
                   }}
                   onChange={(e) => setUserAnswer(e.target.value)}
                   autoFocus
@@ -142,7 +148,12 @@ const Play = (): React.JSX.Element => {
               </FieldContent>
             </Field>
 
-            <Button onClick={checkAnswer} variant="default">
+            <Button
+              onClick={() => {
+                if (!inputLocked) checkAnswer();
+              }}
+              variant="default"
+            >
               Check
             </Button>
           </span>
