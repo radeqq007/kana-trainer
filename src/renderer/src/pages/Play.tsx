@@ -83,10 +83,10 @@ const Play = (): React.JSX.Element => {
       setMsg(`Wrong! Correct answer: ${question.a}`);
       setCorrect(false);
     }
-    setInputLocked(true)
+    setInputLocked(true);
     setTimeout(() => {
-      nextQuestion()
-      setInputLocked(false)
+      nextQuestion();
+      setInputLocked(false);
     }, 800);
   };
 
