@@ -137,6 +137,7 @@ const Play = (): React.JSX.Element => {
                     if (e.key === "Enter") checkAnswer();
                   }}
                   onChange={(e) => setUserAnswer(e.target.value)}
+                  autoFocus
                 />
               </FieldContent>
             </Field>
