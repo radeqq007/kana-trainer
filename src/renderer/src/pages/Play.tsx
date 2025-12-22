@@ -1,7 +1,9 @@
 import { Button } from "@components/ui/button";
 import { Field, FieldContent } from "@components/ui/field";
 import { Input } from "@components/ui/input";
+import { Progress } from "@renderer/components/ui/progress";
 import Characters from "@renderer/data/characters.json";
+import { cn } from "@renderer/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -34,6 +36,9 @@ const Play = (): React.JSX.Element => {
   });
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [score, setScore] = useState<Score>({ correct: 0, incorrect: 0 });
+
+  const [msg, setMsg] = useState<string>("");
+  const [correct, setCorrect] = useState<boolean>(false);
 
   const generateQuestion = useCallback(
     (count: number, currentEnabled: Record<System, string[]>): { q: string; a: string } => {
@@ -70,11 +75,18 @@ const Play = (): React.JSX.Element => {
   const checkAnswer = (): void => {
     if (userAnswer == question.a) {
       setScore((prev) => ({ ...prev, correct: prev.correct + 1 }));
+      setMsg(`✅ ${userAnswer} is correct!`);
+      setCorrect(true);
     } else {
       setScore((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
+      setMsg(`❌ Correct answer: ${question.a}`);
+      setCorrect(false);
     }
     nextQuestion();
   };
+
+  const total = score.correct + score.incorrect;
+  const accuracy = total === 0 ? 50 : (score.correct / total) * 100;
 
   useEffect(() => {
     (async () => {
@@ -133,9 +145,26 @@ const Play = (): React.JSX.Element => {
               Check
             </Button>
           </span>
-          <div className="mt-4 text-lg">
-            ✅ Correct: {score.correct} | ❌ Incorrect: {score.incorrect}
-          </div>
+
+          <Progress value={accuracy} className="w-full" />
+
+          <span className="flex flex-col justify-center items-center *:text-center">
+            <span className="text-2xl font-semibold mt-4">
+              {score.correct} / {score.correct + score.incorrect}
+            </span>
+            <span className="text-md text-gray-300">{accuracy.toFixed(2)}%</span>
+          </span>
+
+          <span
+            className={cn(
+              "text-lg",
+              correct ? "border-green-800" : "border-red-900",
+              total > 0 ? "border" : "",
+              "px-4 py-1 rounded-lg",
+            )}
+          >
+            {msg}
+          </span>
         </div>
       </div>
     </div>
