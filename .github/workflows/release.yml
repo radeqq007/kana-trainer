@@ -35,6 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build and Publish
+        shell: bash
         run: |
           if [ "$RUNNER_OS" == "Windows" ]; then
             pnpm exec electron-builder --win --publish always
