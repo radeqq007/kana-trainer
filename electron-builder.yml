@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.radeqq007.kana-trainer
 productName: kana-trainer
 directories:
   buildResources: build
@@ -21,10 +21,10 @@ nsis:
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+    - NSCameraUsageDescription: Kana Trainer requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Kana Trainer requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Kana Trainer requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Kana Trainer requests access to the user's Downloads folder.
   notarize: false
 dmg:
   artifactName: ${name}-${version}.${ext}
@@ -33,13 +33,13 @@ linux:
     - AppImage
     - snap
     - deb
-  maintainer: electronjs.org
-  category: Utility
+  maintainer: radeqq007
+  category: Education
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  url: https://github.com/radeqq007/kana-trainer/releases
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
