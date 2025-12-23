@@ -12,6 +12,7 @@ Kana Trainer is a simple desktop application designed to help you learn Japanese
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/radeqq007/kana-trainer.git
    cd kana-trainer
@@ -46,7 +47,6 @@ pnpm build:linux
 ```
 
 Output files will be generated in the `dist` folder.
-
 
 ## Screenshots
 
