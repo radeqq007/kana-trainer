@@ -46,7 +46,7 @@ const Play = (): React.JSX.Element => {
       const systems = (["hiragana", "katakana"] as System[]).filter(
         (s) => currentEnabled[s].length > 0,
       );
-      console.log(systems);
+
       if (systems.length === 0) return { q: "None Selected", a: "" };
 
       const system = systems[Math.floor(Math.random() * systems.length)];
