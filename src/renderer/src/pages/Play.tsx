@@ -95,14 +95,12 @@ const Play = (): React.JSX.Element => {
 
   useEffect(() => {
     (async () => {
-      // @ts-ignore imma fix that later
       const h = await window.store.get("hiragana");
-      // @ts-ignore imma fix that later
       const k = await window.store.get("katakana");
 
-      const fetchedEnabled = {
-        hiragana: h || [],
-        katakana: k || [],
+      const fetchedEnabled: Record<System, string[]> = {
+        hiragana: Array.isArray(h) ? h : [],
+        katakana: Array.isArray(k) ? k : [],
       };
 
       setEnabled(fetchedEnabled);
