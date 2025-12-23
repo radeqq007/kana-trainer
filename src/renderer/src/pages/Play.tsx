@@ -129,15 +129,14 @@ const Play = (): React.JSX.Element => {
         </span>
 
         <div className="flex flex-col items-center gap-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <h1 className="text-6xl">{question.q.map((ch, i) => {
+          <h1 className="text-6xl">
+            {question.q.map((ch, i) => {
               return (
                 <Tooltip key={i}>
                   <TooltipTrigger asChild>
                     <span>{ch}</span>
                   </TooltipTrigger>
-                  <TooltipContent className="text-center border">
-                    {question.a[i]}
-                  </TooltipContent>
+                  <TooltipContent className="text-center border">{question.a[i]}</TooltipContent>
                 </Tooltip>
               );
             })}
