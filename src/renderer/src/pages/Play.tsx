@@ -180,7 +180,7 @@ const Play = (): React.JSX.Element => {
           <span
             className={cn(
               "text-lg",
-              correct ? "border-green-800" : "border-red-900",
+              correct ? "border-green-800 bg-green-800/10" : "border-red-900 bg-red-900/20",
               total > 0 ? "border" : "",
               "px-4 py-1 rounded-lg",
             )}
