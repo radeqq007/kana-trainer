@@ -38,11 +38,11 @@ jobs:
         shell: bash
         run: |
           if [ "$RUNNER_OS" == "Windows" ]; then
-            pnpm exec electron-builder --win --publish always
+            pnpm run build:win -- --publish always
           elif [ "$RUNNER_OS" == "macOS" ]; then
-            pnpm exec electron-builder --mac --publish always
+            pnpm run build:mac -- --publish always
           else
-            pnpm exec electron-builder --linux --publish always
+            pnpm run build:linux -- --publish always
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
