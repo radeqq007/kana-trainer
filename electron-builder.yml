@@ -35,6 +35,7 @@ appImage:
 npmRebuild: false
 publish:
   provider: github
-  url: https://github.com/radeqq007/kana-trainer/releases
+  owner: radeqq007
+  repo: kana-trainer
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
