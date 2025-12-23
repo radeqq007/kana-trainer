@@ -1,6 +1,7 @@
 import { Button } from "@components/ui/button";
 import { Field, FieldContent } from "@components/ui/field";
 import { Input } from "@components/ui/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/tooltip";
 import { Progress } from "@renderer/components/ui/progress";
 import Characters from "@renderer/data/characters.json";
 import { cn } from "@renderer/lib/utils";
@@ -8,8 +9,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 interface Question {
-  q: string;
-  a: string;
+  q: string[];
+  a: string[];
 }
 
 interface Score {
@@ -31,8 +32,8 @@ const Play = (): React.JSX.Element => {
   const [loading, setLoading] = useState(true);
 
   const [question, setQuestion] = useState<Question>({
-    q: "",
-    a: "",
+    q: [],
+    a: [],
   });
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [score, setScore] = useState<Score>({ correct: 0, incorrect: 0 });
@@ -42,24 +43,24 @@ const Play = (): React.JSX.Element => {
   const [inputLocked, setInputLocked] = useState(false);
 
   const generateQuestion = useCallback(
-    (count: number, currentEnabled: Record<System, string[]>): { q: string; a: string } => {
+    (count: number, currentEnabled: Record<System, string[]>): { q: string[]; a: string[] } => {
       const systems = (["hiragana", "katakana"] as System[]).filter(
         (s) => currentEnabled[s].length > 0,
       );
 
-      if (systems.length === 0) return { q: "None Selected", a: "" };
+      if (systems.length === 0) return { q: ["None Selected"], a: [""] };
 
       const system = systems[Math.floor(Math.random() * systems.length)];
       const keys = currentEnabled[system];
 
-      let q = "";
-      let a = "";
+      const q: string[] = [];
+      const a: string[] = [];
 
       for (let i = 0; i < count; i++) {
-        const romaji = keys[Math.floor(Math.random() * keys.length)];
-        const kana = (Characters as Record<System, Record<string, string>>)[system][romaji];
-        q += kana;
-        a += romaji;
+        const romaji: string = keys[Math.floor(Math.random() * keys.length)];
+        const kana: string = (Characters as Record<System, Record<string, string>>)[system][romaji];
+        q.push(kana);
+        a.push(romaji);
       }
 
       return { q, a };
@@ -74,13 +75,13 @@ const Play = (): React.JSX.Element => {
   }, [charCount, enabled, generateQuestion]);
 
   const checkAnswer = (): void => {
-    if (userAnswer == question.a) {
+    if (userAnswer == question.a.join("")) {
       setScore((prev) => ({ ...prev, correct: prev.correct + 1 }));
       setMsg(`${userAnswer} is correct!`);
       setCorrect(true);
     } else {
       setScore((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
-      setMsg(`Wrong! Correct answer: ${question.a}`);
+      setMsg(`Wrong! Correct answer: ${question.a.join("")}`);
       setCorrect(false);
     }
     setInputLocked(true);
@@ -128,7 +129,19 @@ const Play = (): React.JSX.Element => {
         </span>
 
         <div className="flex flex-col items-center gap-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <h1 className="text-6xl">{question.q}</h1>
+          <h1 className="text-6xl">{question.q.map((ch, i) => {
+              return (
+                <Tooltip key={i}>
+                  <TooltipTrigger asChild>
+                    <span>{ch}</span>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-center border">
+                    {question.a[i]}
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </h1>
           <span className="flex align-center items-end gap-2">
             <Field>
               <FieldContent>
