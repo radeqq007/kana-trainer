@@ -26,7 +26,6 @@ dmg:
 linux:
   target:
     - AppImage
-    - snap
     - deb
   maintainer: radeqq007
   category: Education
