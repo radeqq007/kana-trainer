@@ -75,7 +75,7 @@ const Characters = (): React.JSX.Element => {
             checked={hiraganaChecked}
           />
           <h2 className="text-2xl font-medium w-full">Hiragana:</h2>
-      </span>
+        </span>
         <ToggleGroup
           type="multiple"
           variant="default"
