@@ -6,6 +6,8 @@ import chars from "@renderer/data/characters.json";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+type KanaType = "hiragana" | "katakana";
+
 const Characters = (): React.JSX.Element => {
   const [hiragana, setHiragana] = useState<string[]>([]);
   const [katakana, setKatakana] = useState<string[]>([]);
@@ -29,33 +31,29 @@ const Characters = (): React.JSX.Element => {
     window.store.get("katakana").then((val) => setKatakana(val as string[]));
   }, []);
 
-  const handleHiraganaChange = (value: string[]): void => {
-    setHiragana(value);
-    window.store.set("hiragana", value);
-  };
-
-  const handleKatakanaChange = (value: string[]): void => {
-    window.store.set("katakana", value);
-    setKatakana(value);
-  };
-
-  const handleHiraganaCheck = (state: CheckedState): void => {
-    if (state === true || state === "indeterminate") {
-      setHiragana(Object.keys(chars.hiragana));
-      window.store.set("hiragana", Object.keys(chars.hiragana));
+  const handleKanaChange = (type: KanaType, value: string[]): void => {
+    if (type === "hiragana") {
+      setHiragana(value);
+      window.store.set("hiragana", value);
     } else {
-      setHiragana([]);
-      window.store.set("hiragana", []);
+      setKatakana(value);
+      window.store.set("katakana", value);
     }
   };
 
-  const handleKatakanaCheck = (state: CheckedState): void => {
+  const handleCheck = (type: KanaType, state: CheckedState): void => {
     if (state === true || state === "indeterminate") {
-      setKatakana(Object.keys(chars.katakana));
-      window.store.set("katakana", Object.keys(chars.katakana));
+      if (type === "hiragana") {
+        setHiragana(Object.keys(chars.hiragana));
+      } else {
+        setKatakana(Object.keys(chars.katakana));
+      }
     } else {
-      setKatakana([]);
-      window.store.set("katakana", []);
+      if (type === "hiragana") {
+        setHiragana([]);
+      } else {
+        setKatakana([]);
+      }
     }
   };
 
@@ -72,7 +70,10 @@ const Characters = (): React.JSX.Element => {
 
       <span className="flex flex-col gap-3 justify-center items-center w-2/3 m-auto">
         <span className="flex gap-2 w-full items-center">
-          <Checkbox onCheckedChange={handleHiraganaCheck} checked={hiraganaChecked} />
+          <Checkbox
+            onCheckedChange={(state) => handleCheck("hiragana", state)}
+            checked={hiraganaChecked}
+          />
           <h2 className="text-2xl font-medium w-full">Hiragana:</h2>
       </span>
         <ToggleGroup
@@ -81,7 +82,7 @@ const Characters = (): React.JSX.Element => {
           size="lg"
           className="flex flex-wrap"
           value={hiragana}
-          onValueChange={handleHiraganaChange}
+          onValueChange={(value) => handleKanaChange("hiragana", value)}
         >
           {Object.entries(chars.hiragana).map(([key, value]) => (
             <ToggleGroupItem
@@ -98,8 +99,11 @@ const Characters = (): React.JSX.Element => {
 
       <span className="flex flex-col gap-3 justify-center items-center w-2/3 m-auto">
         <span className="flex gap-2 w-full items-center">
-          <Checkbox onCheckedChange={handleKatakanaCheck} checked={katakanaChecked} />
-        <h2 className="text-2xl font-medium w-full">Katakana:</h2>
+          <Checkbox
+            onCheckedChange={(state) => handleCheck("katakana", state)}
+            checked={katakanaChecked}
+          />
+          <h2 className="text-2xl font-medium w-full">Katakana:</h2>
         </span>
         <ToggleGroup
           type="multiple"
@@ -107,7 +111,7 @@ const Characters = (): React.JSX.Element => {
           size="lg"
           className="flex flex-wrap"
           value={katakana}
-          onValueChange={handleKatakanaChange}
+          onValueChange={(value) => handleKanaChange("katakana", value)}
         >
           {Object.entries(chars.katakana).map(([key, value]) => (
             <ToggleGroupItem
