@@ -14,12 +14,10 @@ const Characters = (): React.JSX.Element => {
 
   const handleHiraganaChange = (value: string[]): void => {
     setHiragana(value);
-    // @ts-ignore for now
     window.store.set("hiragana", value);
   };
 
   const handleKatakanaChange = (value: string[]): void => {
-    // @ts-ignore for now
     window.store.set("katakana", value);
     setKatakana(value);
   };
