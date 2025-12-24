@@ -1,3 +1,5 @@
+import { Checkbox } from "@components/ui/checkbox";
+import { CheckedState } from "@radix-ui/react-checkbox";
 import { Button } from "@renderer/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@renderer/components/ui/toggle-group";
 import chars from "@renderer/data/characters.json";
@@ -7,6 +9,21 @@ import { Link } from "react-router-dom";
 const Characters = (): React.JSX.Element => {
   const [hiragana, setHiragana] = useState<string[]>([]);
   const [katakana, setKatakana] = useState<string[]>([]);
+
+  const hiraganaChecked: CheckedState =
+    hiragana.length === 0
+      ? false
+      : hiragana.length === Object.keys(chars.hiragana).length
+        ? true
+        : "indeterminate";
+
+  const katakanaChecked: CheckedState =
+    katakana.length === 0
+      ? false
+      : katakana.length === Object.keys(chars.katakana).length
+        ? true
+        : "indeterminate";
+
   useEffect(() => {
     window.store.get("hiragana").then((val) => setHiragana(val as string[]));
     window.store.get("katakana").then((val) => setKatakana(val as string[]));
@@ -22,6 +39,26 @@ const Characters = (): React.JSX.Element => {
     setKatakana(value);
   };
 
+  const handleHiraganaCheck = (state: CheckedState): void => {
+    if (state === true || state === "indeterminate") {
+      setHiragana(Object.keys(chars.hiragana));
+      window.store.set("hiragana", Object.keys(chars.hiragana));
+    } else {
+      setHiragana([]);
+      window.store.set("hiragana", []);
+    }
+  };
+
+  const handleKatakanaCheck = (state: CheckedState): void => {
+    if (state === true || state === "indeterminate") {
+      setKatakana(Object.keys(chars.katakana));
+      window.store.set("katakana", Object.keys(chars.katakana));
+    } else {
+      setKatakana([]);
+      window.store.set("katakana", []);
+    }
+  };
+
   return (
     <div className="flex flex-col p-4 gap-10">
       <span className="flex items-center gap-6">
@@ -34,7 +71,10 @@ const Characters = (): React.JSX.Element => {
       </span>
 
       <span className="flex flex-col gap-3 justify-center items-center w-2/3 m-auto">
-        <h2 className="text-2xl font-medium w-full">Hiragana:</h2>
+        <span className="flex gap-2 w-full items-center">
+          <Checkbox onCheckedChange={handleHiraganaCheck} checked={hiraganaChecked} />
+          <h2 className="text-2xl font-medium w-full">Hiragana:</h2>
+      </span>
         <ToggleGroup
           type="multiple"
           variant="default"
@@ -57,7 +97,10 @@ const Characters = (): React.JSX.Element => {
       </span>
 
       <span className="flex flex-col gap-3 justify-center items-center w-2/3 m-auto">
+        <span className="flex gap-2 w-full items-center">
+          <Checkbox onCheckedChange={handleKatakanaCheck} checked={katakanaChecked} />
         <h2 className="text-2xl font-medium w-full">Katakana:</h2>
+        </span>
         <ToggleGroup
           type="multiple"
           variant="default"
