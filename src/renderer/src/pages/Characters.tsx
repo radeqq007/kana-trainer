@@ -8,11 +8,8 @@ const Characters = (): React.JSX.Element => {
   const [hiragana, setHiragana] = useState<string[]>([]);
   const [katakana, setKatakana] = useState<string[]>([]);
   useEffect(() => {
-    // @ts-ignore for now
-    window.store.get("hiragana").then((val) => setHiragana(val));
-
-    // @ts-ignore for now
-    window.store.get("katakana").then((val) => setKatakana(val));
+    window.store.get("hiragana").then((val) => setHiragana(val as string[]));
+    window.store.get("katakana").then((val) => setKatakana(val as string[]));
   }, []);
 
   const handleHiraganaChange = (value: string[]): void => {
