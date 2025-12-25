@@ -4,7 +4,7 @@ import { Input } from "@components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/tooltip";
 import { Progress } from "@renderer/components/ui/progress";
 import Characters from "@renderer/data/characters.json";
-import { cn } from "@renderer/lib/utils";
+import { cn, pickUnique } from "@renderer/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -53,15 +53,10 @@ const Play = (): React.JSX.Element => {
       const system = systems[Math.floor(Math.random() * systems.length)];
       const keys = currentEnabled[system];
 
-      const q: string[] = [];
-      const a: string[] = [];
-
-      for (let i = 0; i < count; i++) {
-        const romaji: string = keys[Math.floor(Math.random() * keys.length)];
-        const kana: string = (Characters as Record<System, Record<string, string>>)[system][romaji];
-        q.push(kana);
-        a.push(romaji);
-      }
+      const a: string[] = pickUnique(keys, count);
+      const q: string[] = a.map(
+        (key) => (Characters as Record<System, Record<string, string>>)[system][key],
+      );
 
       return { q, a };
     },
