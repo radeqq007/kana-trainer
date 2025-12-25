@@ -53,9 +53,9 @@ const Play = (): React.JSX.Element => {
       const system = systems[Math.floor(Math.random() * systems.length)];
       const keys = currentEnabled[system];
 
-      if (keys.length < count) return { q: ["Not enough characters"], a: [""] };
+      const safeCount = Math.min(count, keys.length);
 
-      const a: string[] = pickUnique(keys, count);
+      const a: string[] = pickUnique(keys, safeCount);
       const q: string[] = a.map(
         (key) => (Characters as Record<System, Record<string, string>>)[system][key],
       );
