@@ -53,6 +53,8 @@ const Play = (): React.JSX.Element => {
       const system = systems[Math.floor(Math.random() * systems.length)];
       const keys = currentEnabled[system];
 
+      if (keys.length < count) return { q: ["Not enough characters"], a: [""] };
+
       const a: string[] = pickUnique(keys, count);
       const q: string[] = a.map(
         (key) => (Characters as Record<System, Record<string, string>>)[system][key],
@@ -99,12 +101,12 @@ const Play = (): React.JSX.Element => {
         katakana: Array.isArray(k) ? k : [],
       };
 
+      setQuestion({ q: ["Not enough characters enabled"], a: [""] });
       setEnabled(fetchedEnabled);
 
       // Immediately generate the first question using the fetched data
       const q = generateQuestion(charCount, fetchedEnabled);
       setQuestion(q);
-
       setLoading(false);
     })();
   }, [charCount, generateQuestion]);
