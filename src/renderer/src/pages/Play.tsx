@@ -72,7 +72,7 @@ const Play = (): React.JSX.Element => {
   }, [charCount, enabled, generateQuestion]);
 
   const checkAnswer = (): void => {
-    if (userAnswer == question.a.join("")) {
+    if (userAnswer.trim().toLowerCase() == question.a.join("")) {
       setScore((prev) => ({ ...prev, correct: prev.correct + 1 }));
       setMsg(`${userAnswer} is correct!`);
       setCorrect(true);
