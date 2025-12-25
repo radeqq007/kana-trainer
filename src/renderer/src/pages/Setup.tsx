@@ -26,8 +26,9 @@ const Setup = (): React.JSX.Element => {
               <Input
                 type="number"
                 required
+                min={1}
                 value={numberOfChars}
-                onChange={(e) => setNumberOfChars(Number(e.target.value))}
+                onChange={(e) => setNumberOfChars(Math.max(1, Number(e.target.value)))}
               />
             </FieldContent>
           </Field>
