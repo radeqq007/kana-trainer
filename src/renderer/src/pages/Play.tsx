@@ -126,7 +126,7 @@ const Play = (): React.JSX.Element => {
         </span>
 
         <div className="flex flex-col items-center gap-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <h1 className="text-6xl">
+          <h1 className="text-6xl text-center">
             {question.q.map((ch, i) => {
               return (
                 <Tooltip key={i}>
