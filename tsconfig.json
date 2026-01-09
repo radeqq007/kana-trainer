@@ -3,6 +3,7 @@
   "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }],
   "compilerOptions": {
     "baseUrl": ".",
+    "target": "ES5",
     "paths": {
       "@renderer/*": ["src/renderer/src/*"]
     }
