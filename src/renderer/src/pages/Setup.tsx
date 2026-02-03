@@ -1,11 +1,23 @@
 import { Button } from "@components/ui/button";
-import { Field, FieldContent, FieldLabel } from "@components/ui/field";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+  FieldTitle,
+} from "@components/ui/field";
 import { Input } from "@components/ui/input";
+import { Label } from "@radix-ui/react-label";
+import { RadioGroup } from "@radix-ui/react-radio-group";
+import { RadioGroupItem } from "@renderer/components/ui/radio-group";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+type GameType = "romaji" | "choice";
+
 const Setup = (): React.JSX.Element => {
   const [numberOfChars, setNumberOfChars] = useState(1);
+  const [gameType, setGameType] = useState<GameType>("romaji");
 
   return (
     <div>
@@ -19,7 +31,7 @@ const Setup = (): React.JSX.Element => {
           <h1 className="text-4xl font-bold">Play</h1>
         </span>
 
-        <div className="flex flex-col gap-6 items-center w-2/3 m-auto">
+        <div className="flex flex-col gap-15 items-center min-w-1/3 m-auto">
           <Field>
             <FieldLabel className="text-xl">Number of characters in one question: </FieldLabel>
             <FieldContent>
@@ -33,7 +45,42 @@ const Setup = (): React.JSX.Element => {
             </FieldContent>
           </Field>
 
-          <Link to="/play" state={{ charCount: numberOfChars }}>
+          <div>
+            <Label className="text-xl font-medium">Game type: </Label>
+            <RadioGroup
+              className="flex gap-4 *:border-secondary md:flex-row flex-col"
+              defaultValue="romaji"
+              onChange={(e) => setGameType((e.target as HTMLInputElement).value as GameType)}
+            >
+              <FieldLabel htmlFor="romaji">
+                <Field orientation="horizontal">
+                  <FieldContent>
+                    <FieldTitle>Romaji</FieldTitle>
+                    <FieldDescription>See the kana and answer in romaji.</FieldDescription>
+                  </FieldContent>
+                  <RadioGroupItem value="romaji" id="romaji" />
+                </Field>
+              </FieldLabel>
+
+              <FieldLabel htmlFor="choice">
+                <Field orientation="horizontal">
+                  <FieldContent>
+                    <FieldTitle>Choice</FieldTitle>
+                    <FieldDescription>
+                      See the romaji and select the correct answer.
+                    </FieldDescription>
+                  </FieldContent>
+                  <RadioGroupItem value="choice" id="choice" />
+                </Field>
+              </FieldLabel>
+            </RadioGroup>
+          </div>
+
+          <Link
+            to="/play"
+            className="w-full *:w-full"
+            state={{ charCount: numberOfChars, gameType: gameType }}
+          >
             <Button variant="default">Start</Button>
           </Link>
         </div>
