@@ -4,12 +4,9 @@ Kana Trainer is a simple desktop application designed to help you learn Japanese
 
 ## Getting Started
 
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (Latest LTS recommended)
-- [pnpm](https://pnpm.io/) (Recommended package manager)
-
 ### Installation
+
+You can install the app in the [releases](https://github.com/radeqq007/kana-trainer/releases) tab or clone the repository and run it yourself:
 
 1. Clone the repository:
 
