@@ -20,3 +20,9 @@ export function pickUnique<T>(arr: T[], count: number): T[] {
 
   return result.slice(0, count);
 }
+
+export function getAccuracy(correct: number, incorrect: number): number {
+  const total = correct + incorrect;
+  const accuracy = total === 0 ? 50 : (correct / total) * 100;
+  return accuracy;
+}

@@ -4,7 +4,7 @@ import { Input } from "@components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/tooltip";
 import { Progress } from "@renderer/components/ui/progress";
 import Characters from "@renderer/data/characters.json";
-import { cn, pickUnique } from "@renderer/lib/utils";
+import { cn, getAccuracy, pickUnique } from "@renderer/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -88,8 +88,7 @@ const Play = (): React.JSX.Element => {
     }, 800);
   };
 
-  const total = score.correct + score.incorrect;
-  const accuracy = total === 0 ? 50 : (score.correct / total) * 100;
+  const accuracy = getAccuracy(score.correct, score.incorrect);
 
   useEffect(() => {
     (async () => {
@@ -178,7 +177,7 @@ const Play = (): React.JSX.Element => {
             className={cn(
               "text-lg",
               correct ? "border-green-800 bg-green-800/10" : "border-red-900 bg-red-900/20",
-              total > 0 ? "border" : "",
+              score.correct + score.incorrect > 0 ? "border" : "",
               "px-4 py-1 rounded-lg",
             )}
           >
