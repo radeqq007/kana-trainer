@@ -2,124 +2,19 @@ import { Button } from "@components/ui/button";
 import { Field, FieldContent } from "@components/ui/field";
 import { Input } from "@components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/tooltip";
-import { Progress } from "@renderer/components/ui/progress";
-import Characters from "@renderer/data/characters.json";
-import { cn, getAccuracy, pickUnique } from "@renderer/lib/utils";
-import { useCallback, useEffect, useState } from "react";
+import { Progress } from "@components/ui/progress";
+import { cn, getAccuracy } from "@renderer/lib/utils";
 import { Link, useLocation } from "react-router-dom";
-
-interface Question {
-  q: string[];
-  a: string[];
-}
-
-interface Score {
-  correct: number;
-  incorrect: number;
-  // streak: number;
-}
-
-type System = "hiragana" | "katakana";
-
-type Feedback = {
-  msg: string;
-  correct: boolean;
-  inputLocked: boolean;
-};
+import { useGame } from "@renderer/hooks/useGame";
 
 const Play = (): React.JSX.Element => {
   const { state } = useLocation();
   const charCount: number = state.charCount;
 
-  const [enabled, setEnabled] = useState<Record<System, string[]>>({
-    hiragana: [],
-    katakana: [],
-  });
-  const [loading, setLoading] = useState(true);
-
-  const [question, setQuestion] = useState<Question>({
-    q: [],
-    a: [],
-  });
-  const [userAnswer, setUserAnswer] = useState<string>("");
-  const [score, setScore] = useState<Score>({ correct: 0, incorrect: 0 });
-
-  const [feedback, setFeedback] = useState<Feedback>({
-    msg: "",
-    correct: false,
-    inputLocked: false,
-  });
-
-  const generateQuestion = useCallback(
-    (count: number, currentEnabled: Record<System, string[]>): { q: string[]; a: string[] } => {
-      const systems = (["hiragana", "katakana"] as System[]).filter(
-        (s) => currentEnabled[s].length > 0,
-      );
-
-      if (systems.length === 0) return { q: ["None Selected"], a: [""] };
-
-      const system = systems[Math.floor(Math.random() * systems.length)];
-      const keys = currentEnabled[system];
-
-      const safeCount = Math.min(count, keys.length);
-
-      const a: string[] = pickUnique(keys, safeCount);
-      const q: string[] = a.map(
-        (key) => (Characters as Record<System, Record<string, string>>)[system][key],
-      );
-
-      return { q, a };
-    },
-    [],
+  const { loading, question, userAnswer, setUserAnswer, score, feedback, checkAnswer } = useGame(
+    state?.charCount || 1,
   );
-
-  const nextQuestion = useCallback((): void => {
-    const { q, a } = generateQuestion(charCount, enabled);
-    setQuestion({ q, a });
-    setUserAnswer("");
-  }, [charCount, enabled, generateQuestion]);
-
-  const checkAnswer = (): void => {
-    if (userAnswer.trim().toLowerCase() == question.a.join("")) {
-      setScore((prev) => ({ ...prev, correct: prev.correct + 1 }));
-      setFeedback({ msg: `${userAnswer} is correct!`, correct: true, inputLocked: true });
-    } else {
-      setScore((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
-
-      setFeedback({
-        msg: `Wrong! Correct answer: ${question.a.join("")}`,
-        correct: false,
-        inputLocked: true,
-      });
-    }
-
-    setTimeout(() => {
-      nextQuestion();
-      setFeedback((prev) => ({ ...prev, inputLocked: false }));
-    }, 800);
-  };
-
   const accuracy = getAccuracy(score.correct, score.incorrect);
-
-  useEffect(() => {
-    (async () => {
-      const h = await window.store.get("hiragana");
-      const k = await window.store.get("katakana");
-
-      const fetchedEnabled: Record<System, string[]> = {
-        hiragana: Array.isArray(h) ? h : [],
-        katakana: Array.isArray(k) ? k : [],
-      };
-
-      setQuestion({ q: ["Not enough characters enabled"], a: [""] });
-      setEnabled(fetchedEnabled);
-
-      // Immediately generate the first question using the fetched data
-      const q = generateQuestion(charCount, fetchedEnabled);
-      setQuestion(q);
-      setLoading(false);
-    })();
-  }, [charCount, generateQuestion]);
 
   if (loading) return <div>Loading...</div>;
 
