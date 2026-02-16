@@ -21,9 +21,15 @@ interface Score {
 
 type System = "hiragana" | "katakana";
 
+type Feedback = {
+  msg: string;
+  correct: boolean;
+  inputLocked: boolean;
+};
+
 const Play = (): React.JSX.Element => {
-  const location = useLocation();
-  const charCount: number = location.state?.charCount;
+  const { state } = useLocation();
+  const charCount: number = state.charCount;
 
   const [enabled, setEnabled] = useState<Record<System, string[]>>({
     hiragana: [],
@@ -38,9 +44,11 @@ const Play = (): React.JSX.Element => {
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [score, setScore] = useState<Score>({ correct: 0, incorrect: 0 });
 
-  const [msg, setMsg] = useState<string>("");
-  const [correct, setCorrect] = useState<boolean>(false);
-  const [inputLocked, setInputLocked] = useState(false);
+  const [feedback, setFeedback] = useState<Feedback>({
+    msg: "",
+    correct: false,
+    inputLocked: false,
+  });
 
   const generateQuestion = useCallback(
     (count: number, currentEnabled: Record<System, string[]>): { q: string[]; a: string[] } => {
@@ -74,17 +82,20 @@ const Play = (): React.JSX.Element => {
   const checkAnswer = (): void => {
     if (userAnswer.trim().toLowerCase() == question.a.join("")) {
       setScore((prev) => ({ ...prev, correct: prev.correct + 1 }));
-      setMsg(`${userAnswer} is correct!`);
-      setCorrect(true);
+      setFeedback({ msg: `${userAnswer} is correct!`, correct: true, inputLocked: true });
     } else {
       setScore((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
-      setMsg(`Wrong! Correct answer: ${question.a.join("")}`);
-      setCorrect(false);
+
+      setFeedback({
+        msg: `Wrong! Correct answer: ${question.a.join("")}`,
+        correct: false,
+        inputLocked: true,
+      });
     }
-    setInputLocked(true);
+
     setTimeout(() => {
       nextQuestion();
-      setInputLocked(false);
+      setFeedback((prev) => ({ ...prev, inputLocked: false }));
     }, 800);
   };
 
@@ -141,12 +152,12 @@ const Play = (): React.JSX.Element => {
             <Field>
               <FieldContent>
                 <Input
-                  readOnly={inputLocked}
+                  readOnly={feedback.inputLocked}
                   type="text"
                   required
                   value={userAnswer}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !inputLocked) checkAnswer();
+                    if (e.key === "Enter" && !feedback.inputLocked) checkAnswer();
                   }}
                   onChange={(e) => setUserAnswer(e.target.value)}
                   autoFocus
@@ -156,7 +167,7 @@ const Play = (): React.JSX.Element => {
 
             <Button
               onClick={() => {
-                if (!inputLocked) checkAnswer();
+                if (!feedback.inputLocked) checkAnswer();
               }}
               variant="default"
             >
@@ -176,12 +187,14 @@ const Play = (): React.JSX.Element => {
           <span
             className={cn(
               "text-lg",
-              correct ? "border-green-800 bg-green-800/10" : "border-red-900 bg-red-900/20",
+              feedback.correct
+                ? "border-green-800 bg-green-800/10"
+                : "border-red-900 bg-red-900/20",
               score.correct + score.incorrect > 0 ? "border" : "",
               "px-4 py-1 rounded-lg",
             )}
           >
-            {msg}
+            {feedback.msg}
           </span>
         </div>
       </div>
