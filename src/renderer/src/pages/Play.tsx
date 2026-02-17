@@ -2,6 +2,7 @@ import { Button } from "@components/ui/button";
 import { Field, FieldContent } from "@components/ui/field";
 import { Input } from "@components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/tooltip";
+import { AnimatePresence, motion } from "framer-motion";
 import { Progress } from "@components/ui/progress";
 import { cn, getAccuracy } from "@renderer/lib/utils";
 import { Link, useLocation } from "react-router-dom";
@@ -30,18 +31,27 @@ const Play = (): React.JSX.Element => {
         </span>
 
         <div className="flex flex-col items-center gap-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <h1 className="text-6xl text-center">
-            {question.q.map((ch, i) => {
-              return (
-                <Tooltip key={i}>
-                  <TooltipTrigger asChild>
-                    <span>{ch}</span>
-                  </TooltipTrigger>
-                  <TooltipContent className="text-center border">{question.a[i]}</TooltipContent>
-                </Tooltip>
-              );
-            })}
-          </h1>
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={question.q.join("")}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="text-6xl text-center"
+            >
+              {question.q.map((ch, i) => {
+                return (
+                  <Tooltip key={i}>
+                    <TooltipTrigger asChild>
+                      <span>{ch}</span>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-center border">{question.a[i]}</TooltipContent>
+                  </Tooltip>
+                );
+              })}
+            </motion.h1>
+          </AnimatePresence>
           <span className="flex align-center items-end gap-2">
             <Field>
               <FieldContent>
