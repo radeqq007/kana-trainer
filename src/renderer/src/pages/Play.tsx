@@ -88,18 +88,27 @@ const Play = (): React.JSX.Element => {
             <span className="text-md text-gray-300">{accuracy.toFixed(2)}%</span>
           </span>
 
-          <span
-            className={cn(
-              "text-lg",
-              feedback.correct
-                ? "border-green-800 bg-green-800/10"
-                : "border-red-900 bg-red-900/20",
-              score.correct + score.incorrect > 0 ? "border" : "",
-              "px-4 py-1 rounded-lg",
-            )}
-          >
-            {feedback.msg}
-          </span>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={`${feedback.msg}-${feedback.correct}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className={cn(
+                "text-lg",
+                feedback.correct
+                  ? "border-green-800 bg-green-800/10"
+                  : "border-red-900 bg-red-900/20",
+                score.correct + score.incorrect > 0
+                  ? "border"
+                  : "border-transparent bg-transparent",
+                "px-4 py-1 rounded-lg",
+              )}
+            >
+              {feedback.msg}
+            </motion.span>
+          </AnimatePresence>
         </div>
       </div>
     </div>
