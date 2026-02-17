@@ -11,7 +11,7 @@ function App(): React.JSX.Element {
 
   return (
     <div className="bg-background text-foreground min-h-screen">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route
             path="/"
