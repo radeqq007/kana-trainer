@@ -9,7 +9,6 @@ import { useGame } from "@renderer/hooks/useGame";
 
 const Play = (): React.JSX.Element => {
   const { state } = useLocation();
-  const charCount: number = state.charCount;
 
   const { loading, question, userAnswer, setUserAnswer, score, feedback, checkAnswer } = useGame(
     state?.charCount || 1,
