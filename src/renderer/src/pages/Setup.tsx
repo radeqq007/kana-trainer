@@ -19,7 +19,7 @@ const Setup = (): React.JSX.Element => {
           <h1 className="text-4xl font-bold">Play</h1>
         </span>
 
-        <div className="flex flex-col gap-6 items-center w-2/3 m-auto">
+        <div className="flex flex-col gap-6 items-center w-1/3 m-auto mt-30">
           <Field>
             <FieldLabel className="text-xl">Number of characters in one question: </FieldLabel>
             <FieldContent>
@@ -34,7 +34,9 @@ const Setup = (): React.JSX.Element => {
           </Field>
 
           <Link to="/play" state={{ charCount: numberOfChars }}>
-            <Button variant="default">Start</Button>
+            <Button variant="default" className="w-20">
+              Start
+            </Button>
           </Link>
         </div>
       </div>
